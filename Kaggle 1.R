@@ -10,7 +10,11 @@ Kaggle$Day <- as.numeric(Kaggle$Day)
 # Create a time series object 
 ts_data <- ts(Kaggle$Difference, start = min(Kaggle$Day), frequency = 365)
 
+<<<<<<< HEAD
 # Fit ARIMA model 
+=======
+# Fit ARIMA model
+>>>>>>> 86f4fced3f52dd883f4858fcbe724522806897b5
 arima_model <- auto.arima(ts_data)
 summary(arima_model) 
 
