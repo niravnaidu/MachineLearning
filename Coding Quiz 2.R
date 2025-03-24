@@ -1,0 +1,5 @@
+library(regclass)
+data("SURVEY10")
+M <- lm(Height~Weight, data = SURVEY10)
+visualize_model(M)
+summary(M)
