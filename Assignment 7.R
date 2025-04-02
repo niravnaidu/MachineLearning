@@ -49,6 +49,7 @@ glimpse(F1)
 
 find_transformations(F1Drivers)
 F1RaceEntriesYearsActive <- F1$Race_Entries / F1$Years_Active
+summary(F1two)
 
 F1two <- lm(F1$Points~F1RaceEntriesYearsActive+F1$Race_Wins)
 visualize_model(F1two)
@@ -147,6 +148,23 @@ model_summary %>%
 F1$Nationality <- as.factor(F1$Nationality)
 F1three <- lm(F1$Race_Starts~F1$Nationality*F1$Race_Entries, data = F1)
 visualize_model(F1three)
+summary(F1three)
+# Fit the multiple regression model with interaction
+F1three <- lm(F1$Race_Starts ~ F1$Nationality * F1$Race_Entries, data = F1)
+
+# Convert model summary into a tidy data frame
+summary_table <- tidy(F1three)
+
+# Create a well-styled table using kable and kableExtra
+summary_table %>%
+  kbl(digits = 3, format = "html", caption = "Regression Model Summary: Race Starts") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
+                full_width = FALSE, 
+                position = "center") %>%
+  column_spec(1, bold = TRUE, color = "black") %>%
+  column_spec(2:5, color = "blue") %>%
+  row_spec(0, bold = TRUE, background = "#f5f5f5")
+
 
 # Create an interaction plot with regression lines
 ggplot(F1, aes(x = Race_Entries, y = Race_Starts, color = Nationality)) +
@@ -163,4 +181,8 @@ ggplot(F1, aes(x = Race_Entries, y = Race_Starts, color = Nationality)) +
     plot.title = element_text(hjust = 0.5, face = "bold"),
     legend.position = "right"
   )
+
+library(kableExtra)
+library(knitr)
+library(broom)
 
