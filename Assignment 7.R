@@ -1,6 +1,9 @@
 library(regclass)
 library(ggplot2)
 library(dplyr)
+library(broom)
+install.packages("gridExtra")
+library(gridExtra)
 F1 <- read.csv("F1Drivers_Dataset.csv")
 
 hist(F1$Points)
@@ -48,6 +51,33 @@ F1RaceEntriesYearsActive <- F1$Race_Entries / F1$Years_Active
 
 F1two <- lm(F1$Points~F1RaceEntriesYearsActive+F1$Race_Wins)
 visualize_model(F1two)
+# Fit the model
+F1two <- lm(F1$Points ~ F1RaceEntriesYearsActive + F1$Race_Wins, data = F1)
+
+# Get residuals after removing the effect of other predictors
+partial_data <- augment(F1two)
+
+# Plot the effect of Race Entries Years Active
+p1 <- ggplot(partial_data, aes(x = F1RaceEntriesYearsActive, y = .fitted)) +
+  geom_point(color = "#0073C2", alpha = 0.7) +
+  geom_smooth(method = "lm", color = "#E69F00", se = FALSE) +
+  labs(title = "Effect of Race Entries Years Active", 
+       x = "Years Active", 
+       y = "Predicted Points") +
+  theme_minimal()
+
+# Plot the effect of Race Wins
+p2 <- ggplot(partial_data, aes(x = F1$Race_Wins, y = .fitted)) +
+  geom_point(color = "#009E73", alpha = 0.7) +
+  geom_smooth(method = "lm", color = "#E69F00", se = FALSE) +
+  labs(title = "Effect of Race Wins", 
+       x = "Race Wins", 
+       y = "Predicted Points") +
+  theme_minimal()
+
+# Arrange plots side by side
+grid.arrange(p1, p2, ncol = 2)
+
 
 range(F1RaceEntriesYearsActive)
 range(F1$Race_Wins)
