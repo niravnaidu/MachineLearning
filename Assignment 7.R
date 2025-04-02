@@ -4,6 +4,7 @@ library(dplyr)
 library(broom)
 install.packages("gridExtra")
 library(gridExtra)
+library(flextable)
 F1 <- read.csv("F1Drivers_Dataset.csv")
 
 hist(F1$Points)
@@ -81,9 +82,10 @@ grid.arrange(p1, p2, ncol = 2)
 
 range(F1RaceEntriesYearsActive)
 range(F1$Race_Wins)
-df <- data.frame(F1RaceEntriesYearsActive, Race_Wins = c(0,370))
-extrapolation_check2(F1two, newdata = df)
 
+df <- data.frame(F1RaceEntriesYearsActive, Race_Wins = c(0, 30, 91, 103))
+extrapolation_check2(F1two, newdata = df)
+summary(F1$Race_Wins)
 
 library(car)
 influencePlot(F1two)
